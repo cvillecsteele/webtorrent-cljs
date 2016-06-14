@@ -21,7 +21,7 @@ A trival example:
     (let [buf (js/Buffer. (str "content" (rand)))
           c1 (wtc/seed client buf)]
       (go
-        (let [t (async/<! c1)]
+        (let [[t] (async/<! c1)]
           (doseq [file (js->clj (aget t "files"))]
             (let [c (wtf/get-buffer file)
                   [err buf] (async/<! c)]
