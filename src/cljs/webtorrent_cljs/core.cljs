@@ -4,11 +4,13 @@
   (:require
    [cljs.core.async :as async]
    [webtorrent]
-   [buffer]
+   [webtorrent-cljs.buffer :as wtb]
    [webtorrent-cljs.client :as wtc]
    [webtorrent-cljs.file :as wtf]))
 
 (enable-console-print!)
+
+(let [b (wtb/from-string (str "content" (rand)))])
 
 (comment
 
