@@ -2,11 +2,11 @@
 
 ## Usage
 
-In your project.clj, add to your :dependencies:
+In your project.clj, add to your `:dependencies`:
 
     [webtorrent-cljs "0.1.0"]
 
-A trival example:
+A trivial example:
 
     (ns example
       (:require-macros
