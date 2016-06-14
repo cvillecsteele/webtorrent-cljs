@@ -3,9 +3,7 @@
    [cljs.core.async.macros :refer [go]])
   (:require
    [clojure.walk :as walk]
-   [cljs.core.async :as async]
-   [webtorrent]
-   [buffer]))
+   [cljs.core.async :as async]))
 
 (enable-console-print!)
 

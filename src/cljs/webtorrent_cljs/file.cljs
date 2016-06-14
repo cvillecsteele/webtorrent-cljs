@@ -4,9 +4,7 @@
   (:require
    [clojure.walk :as walk]
    [cljs.core.async :as async]
-   [webtorrent-cljs.util :refer [with-callback]]
-   [webtorrent]
-   [buffer]))
+   [webtorrent-cljs.util :refer [with-callback]]))
 
 (enable-console-print!)
 

@@ -1,5 +1,32 @@
 # webtorrent-cljs
 
+## Usage
+
+In your project.clj, add to your :dependencies:
+
+   [webtorrent-cljs "0.1.0"]
+
+A trival example:
+
+    (ns example
+      (:require-macros
+       [cljs.core.async.macros :refer [go]])
+      (:require 
+        [cljs.core.async :as async]
+        [webtorrent-cljs.file :as wtf] ;; har har
+        [webtorrent-cljs.client :as wtc]))
+  
+    (def client (wtc/create))
+
+    (let [buf (js/Buffer. (str "content" (rand)))
+          c1 (wtc/seed client buf)]
+      (go
+        (let [t (async/<! c1)]
+          (doseq [file (js->clj (aget t "files"))]
+            (let [c (wtf/get-buffer file)
+                  [err buf] (async/<! c)]
+              (prn "got" buf))))))
+
 
 ## Development
 
@@ -102,39 +129,9 @@ browser and "headless". For example, to test with PhantomJS, use
 lein doo phantom
 ```
 
-## Deploying to Heroku
-
-This assumes you have a
-[Heroku account](https://signup.heroku.com/dc), have installed the
-[Heroku toolbelt](https://toolbelt.heroku.com/), and have done a
-`heroku login` before.
-
-``` sh
-git init
-git add -A
-git commit
-heroku create
-git push heroku master:master
-heroku open
-```
-
-## Running with Foreman
-
-Heroku uses [Foreman](http://ddollar.github.io/foreman/) to run your
-app, which uses the `Procfile` in your repository to figure out which
-server command to run. Heroku also compiles and runs your code with a
-Leiningen "production" profile, instead of "dev". To locally simulate
-what Heroku does you can do:
-
-``` sh
-lein with-profile -dev,+production uberjar && foreman start
-```
-
-Now your app is running at
-[http://localhost:5000](http://localhost:5000) in production mode.
 ## License
 
-Copyright © 2016 FIXME
+Copyright © 2016 Colin Steele
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.

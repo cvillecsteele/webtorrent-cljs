@@ -1,4 +1,4 @@
-(defproject webtorrent-cljs "0.1.0-SNAPSHOT"
+(defproject webtorrent-cljs "0.1.0"
   :description "Clojurescript wrapper for webtorrent"
   :url "https://github.com/cvillecsteele/webtorrent-cljs"
   :license {:name "Eclipse Public License"
@@ -7,28 +7,20 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.36" :scope "provided"]
                  [com.cognitect/transit-clj "0.8.285"]
-                 [ring "1.4.0"]
-                 [ring/ring-defaults "0.2.0"]
-                 [bk/ring-gzip "0.1.1"]
-                 [ring.middleware.logger "0.5.0"]
-                 [compojure "1.5.0"]
-                 [environ "1.0.3"]]
+                 [org.clojure/core.async "0.2.382"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
 
   :min-lein-version "2.6.1"
 
-  :source-paths ["src/clj" "src/cljs"]
+  :source-paths ["src/cljs"]
 
   :test-paths ["test/clj"]
 
   :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
 
   :uberjar-name "webtorrent-cljs.jar"
-
-  ;; Use `lein run` if you just want to start a HTTP server, without figwheel
-  :main webtorrent-cljs.server
 
   ;; nREPL by default starts in the :main namespace, we want to start in `user`
   ;; because that's where our development helper functions like (run) and
@@ -48,12 +40,12 @@
                            :output-to "resources/public/js/compiled/webtorrent_cljs.js"
                            :output-dir "resources/public/js/compiled/out"
                            :source-map-timestamp true
-                           :externs ["externs/webtorrent.js"]
-                           :foreign-libs [{:file "foreign-libs/webtorrent.min.js"
-                                           :file-min "foreign-libs/webtorrent.min.js"
+                           :externs ["resources/externs/webtorrent.js" "resources/externs/buffer.js"]
+                           :foreign-libs [{:file "resources/foreign-libs/webtorrent.min.js"
+                                           :file-min "resources/foreign-libs/webtorrent.min.js"
                                            :provides ["webtorrent"]}
-                                          {:file "foreign-libs/buffer.js"
-                                           :file-min "foreign-libs/buffer.js"
+                                          {:file "resources/foreign-libs/buffer.js"
+                                           :file-min "resources/foreign-libs/buffer.js"
                                            :provides ["buffer"]}]
                            }}
 
@@ -62,12 +54,12 @@
                 :compiler {:output-to "resources/public/js/compiled/testable.js"
                            :main webtorrent-cljs.test-runner
                            :optimizations :none
-                           :externs ["externs/webtorrent.js" "externs/buffer.js"]
-                           :foreign-libs [{:file "foreign-libs/webtorrent.min.js"
-                                           :file-min "foreign-libs/webtorrent.min.js"
+                           :externs ["resources/externs/webtorrent.js" "resources/externs/buffer.js"]
+                           :foreign-libs [{:file "resources/foreign-libs/webtorrent.min.js"
+                                           :file-min "resources/foreign-libs/webtorrent.min.js"
                                            :provides ["webtorrent"]}
-                                          {:file "foreign-libs/buffer.js"
-                                           :file-min "foreign-libs/buffer.js"
+                                          {:file "resources/foreign-libs/buffer.js"
+                                           :file-min "resources/foreign-libs/buffer.js"
                                            :provides ["buffer"]}]
                            }}
 
@@ -80,12 +72,12 @@
                            :source-map-timestamp true
                            :optimizations :advanced
                            :pretty-print false
-                           :externs ["externs/webtorrent.js"]
-                           :foreign-libs [{:file "foreign-libs/webtorrent.min.js"
-                                           :file-min "foreign-libs/webtorrent.min.js"
+                           :externs ["resources/externs/webtorrent.js" "resources/externs/buffer.js"]
+                           :foreign-libs [{:file "resources/foreign-libs/webtorrent.min.js"
+                                           :file-min "resources/foreign-libs/webtorrent.min.js"
                                            :provides ["webtorrent"]}
-                                          {:file "foreign-libs/buffer.js"
-                                           :file-min "foreign-libs/buffer.js"
+                                          {:file "resources/foreign-libs/buffer.js"
+                                           :file-min "resources/foreign-libs/buffer.js"
                                            :provides ["buffer"]}]
                            }}]}
 
@@ -130,13 +122,21 @@
                              [figwheel-sidecar "0.5.4-2"]
                              [com.cemerick/piggieback "0.2.1"]
                              [org.clojure/tools.nrepl "0.2.12"]
-                             [lein-doo "0.1.6"]]
+                             [lein-doo "0.1.6"]
+                             [ring "1.4.0"]
+                             [ring/ring-defaults "0.2.0"]
+                             [bk/ring-gzip "0.1.1"]
+                             [ring.middleware.logger "0.5.0"]
+                             [compojure "1.5.0"]
+                             [environ "1.0.3"]]
 
               :plugins [[lein-figwheel "0.5.4-2"]
                         [lein-doo "0.1.6"]]
 
+              ;; Use `lein run` if you just want to start a HTTP server, without figwheel
+              :main webtorrent-cljs.server
 
-              :source-paths ["dev"]
+              :source-paths ["dev" "src/clj"]
               :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
 
              :uberjar

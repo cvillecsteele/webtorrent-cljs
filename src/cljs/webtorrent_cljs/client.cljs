@@ -5,9 +5,7 @@
   (:require
    [clojure.walk :as walk]
    [cljs.core.async :as async]
-   [webtorrent-cljs.util :refer [with-callback]]
-   [webtorrent]
-   [buffer]))
+   [webtorrent-cljs.util :refer [with-callback]]))
 
 (enable-console-print!)
 
@@ -89,35 +87,3 @@
   "See https://webtorrent.io/docs.  Get a seq of torrents."
   [client]
   (js->clj (aget client "torrents")))
-
-
-
-
-
-(def client (create))
-
-;; (let [buf (buffer/Buffer. (str "content" (rand)))
-;;       c1 (seed client buf)]
-;;   (go
-;;     (let [t (async/<! c1)]
-;;       (doseq [f (js->clj (aget t "files"))]
-;;         (.log js/console "file" f)
-;;         (.getBuffer f (fn [err buf]
-;;                         (.log js/console (.toString buf)))))
-;;       (.log js/console t)
-;;       (prn "infohash" (aget t "infoHash")))))
-
-(let [ih "b1ad70feb18d6fa50e068bcf243d5978b69b92a8" ;; "magnet:?xt=urn:btih:b1ad70feb18d6fa50e068bcf243d5978b69b92a8&dn=Logo.idraw&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&tr=wss%3A%2F%2Ftracker.webtorrent.io"
-      c (add client ih)]
-  (doseq [t (js->clj (aget client "torrents"))]
-    (.log js/console "torrent" t))
-  (go
-    (let [t (async/<! c)]
-      (doseq [f (js->clj (aget t "files"))]
-        (.log js/console "add file" f)
-        (.getBuffer f (fn [err buf]
-                        (.log js/console "d/l" (.toString buf)))))
-      (.log js/console t)
-      (prn (aget t "infoHash")))))
-
-
